@@ -2,17 +2,27 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
+    [Header("Enemy Health Settings")]
     public int maxHealth = 100;
     private int currentHealth;
+    private Animator animator;
+    private EnemyFollowing enemyFollow;
 
     void Start()
     {
         currentHealth = maxHealth;
+        animator = GetComponent<Animator>();
+        enemyFollow = GetComponent<EnemyFollowing>();
     }
 
+    
     public void TakeDamage(int amount)
     {
         currentHealth -= amount;
+
+        if (animator != null)
+            animator.SetTrigger("Hit"); 
+
         if (currentHealth <= 0)
         {
             Die();
@@ -22,10 +32,16 @@ public class Enemy : MonoBehaviour
     void Die()
     {
         Debug.Log("Enemy died!");
-        EnemyFollowing follow = GetComponent<EnemyFollowing>();
-        if (follow != null)
-            follow.Die();  // 🔥 memanggil fungsi dari script EnemyFollowing
 
+        
+        if (enemyFollow != null)
+            enemyFollow.Die();
+
+        
+        if (animator != null)
+            animator.SetTrigger("Die");
+
+        
         Destroy(gameObject, 2f);
     }
 }
