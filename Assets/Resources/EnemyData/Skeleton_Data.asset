@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ad1716dfd25f9d4392677798e8caf3e, type: 3}
+  m_Name: Skeleton_Data
+  m_EditorClassIdentifier: 
+  enemyName: Skeleton
+  enemyIcon: {fileID: -4345098836272668613, guid: df229f201e143134ab72d95ea4e87c61, type: 3}
+  maxHealth: 80
+  moveSpeed: 1.4
+  stopDistance: 1.4
+  attackRange: 1.2
+  attackCooldown: 1.3
+  attackDamage: 10
+  scoreValue: 50

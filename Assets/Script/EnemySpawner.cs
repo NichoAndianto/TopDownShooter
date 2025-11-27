@@ -4,8 +4,12 @@ using System.Collections.Generic;
 
 public class EnemySpawner : MonoBehaviour
 {
-    [Header("Enemy Settings")]
-    public GameObject enemyPrefab;
+    [Header("Enemy Prefabs")]
+    public GameObject enemyPrefab;   
+    public GameObject enemyPrefab2;  
+    public GameObject enemyPrefab3;  
+
+    [Header("Spawn Settings")]
     public float spawnRadius = 6f;
 
     [Header("Wave Settings")]
@@ -20,7 +24,7 @@ public class EnemySpawner : MonoBehaviour
     private int currentWave = 1;
     private List<GameObject> enemies = new List<GameObject>();
     private bool spawning = false;
-    private bool waitingNextWave = false; // 🔹 flag baru
+    private bool waitingNextWave = false;
 
     void Start()
     {
@@ -29,11 +33,9 @@ public class EnemySpawner : MonoBehaviour
 
     void Update()
     {
-       
         enemies.RemoveAll(e => e == null);
         UpdateUI();
 
-        
         if (enemies.Count == 0 && !spawning && !waitingNextWave)
         {
             waitingNextWave = true;
@@ -41,18 +43,22 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
+   
     System.Collections.IEnumerator SpawnWave()
     {
         spawning = true;
-        waitingNextWave = false; 
+        waitingNextWave = false;
 
         int enemyCount = startEnemyCount + (waveIncrement * (currentWave - 1));
 
         for (int i = 0; i < enemyCount; i++)
         {
             Vector2 spawnPos = (Vector2)transform.position + Random.insideUnitCircle * spawnRadius;
-            GameObject newEnemy = Instantiate(enemyPrefab, spawnPos, Quaternion.identity);
+            GameObject prefabToSpawn = GetEnemyPrefabForWave();
+
+            GameObject newEnemy = Instantiate(prefabToSpawn, spawnPos, Quaternion.identity);
             enemies.Add(newEnemy);
+
             yield return new WaitForSeconds(0.2f);
         }
 
@@ -60,6 +66,26 @@ public class EnemySpawner : MonoBehaviour
         UpdateUI();
     }
 
+    
+    GameObject GetEnemyPrefabForWave()
+    {
+        if (currentWave == 1)
+            return enemyPrefab;
+
+        if (currentWave == 2)
+        {
+            
+            return Random.value < 0.5f ? enemyPrefab : enemyPrefab2;
+        }
+
+        
+        float rand = Random.value;
+        if (rand < 0.33f) return enemyPrefab;
+        if (rand < 0.66f) return enemyPrefab2;
+        return enemyPrefab3;
+    }
+
+    
     System.Collections.IEnumerator NextWave()
     {
         yield return new WaitForSeconds(delayBetweenWaves);
@@ -67,6 +93,7 @@ public class EnemySpawner : MonoBehaviour
         StartCoroutine(SpawnWave());
     }
 
+    
     void UpdateUI()
     {
         if (enemyCountText != null)
